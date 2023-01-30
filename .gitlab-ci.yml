@@ -1,0 +1,25 @@
+image: maven:3.3.9-jdk-8
+
+stages:          
+  - test
+  - deploy
+
+test-job:   
+  stage: test 
+  script:
+    - 'mvn clean verify'
+  artifacts:
+    when: always
+    paths:
+      - 'target/site/serenity'
+    expire_in: 1 week
+
+pages:
+  stage: deploy
+  script:
+    - mkdir public
+    - mv target/site/serenity/* public
+  artifacts:
+    when: always
+    paths:
+      - public
